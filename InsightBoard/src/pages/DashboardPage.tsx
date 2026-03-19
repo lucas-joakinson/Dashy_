@@ -27,7 +27,6 @@ export function DashboardPage() {
   const productStats = useMemo(() => {
     if (!products.length) return { categories: [], prices: [] };
 
-    // Products per category
     const categoryMap = products.reduce((acc, p) => {
       acc[p.category] = (acc[p.category] || 0) + 1;
       return acc;
@@ -38,7 +37,6 @@ export function DashboardPage() {
       .sort((a, b) => b.value - a.value)
       .slice(0, 6);
 
-    // Price distribution (binned)
     const priceBins = [
       { range: '0-50', count: 0 },
       { range: '51-200', count: 0 },
@@ -62,7 +60,7 @@ export function DashboardPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-rose-500">
         <AlertCircle size={64} className="mb-6 opacity-20" />
-        <h2 className="text-2xl font-bold glow-text">Initialization Error</h2>
+        <h2 className="text-2xl font-bold">Initialization Error</h2>
         <p className="text-text-secondary mt-2">Could not synchronize with the analytics server.</p>
         <button 
           onClick={() => window.location.reload()}
@@ -82,11 +80,10 @@ export function DashboardPage() {
       className="space-y-10"
     >
       <header>
-        <h2 className="text-3xl font-bold text-text-primary glow-text">Ecosystem Health</h2>
+        <h2 className="text-3xl font-bold text-text-primary">Ecosystem Health</h2>
         <p className="text-text-secondary mt-1 font-mono text-xs uppercase tracking-widest">Real-time performance metrics</p>
       </header>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard 
           title="Active Users" 
@@ -122,12 +119,11 @@ export function DashboardPage() {
         />
       </div>
 
-      {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card className="p-8 h-[450px] flex flex-col group">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-lg font-bold text-text-primary glow-text">Sector Distribution</h3>
+              <h3 className="text-lg font-bold text-text-primary">Sector Distribution</h3>
               <p className="text-xs font-mono text-primary-400/60 uppercase tracking-widest">Top Product Categories</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-hover-bg border border-border-primary flex items-center justify-center text-primary-400">
@@ -175,7 +171,7 @@ export function DashboardPage() {
         <Card className="p-8 h-[450px] flex flex-col group">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-lg font-bold text-text-primary glow-text">Price Dynamics</h3>
+              <h3 className="text-lg font-bold text-text-primary">Price Dynamics</h3>
               <p className="text-xs font-mono text-indigo-400/60 uppercase tracking-widest">Inventory Valuation Spreads</p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-hover-bg border border-border-primary flex items-center justify-center text-indigo-400">
@@ -272,7 +268,6 @@ function StatCard({ title, value, icon, loading, trend, color }: {
         </div>
       </div>
       
-      {/* Decorative Glow */}
       <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary-500/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
     </Card>
   );

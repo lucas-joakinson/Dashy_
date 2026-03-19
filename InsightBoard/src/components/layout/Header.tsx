@@ -26,7 +26,7 @@ export function Header() {
           <Menu size={22} />
         </button>
         <div className="flex flex-col">
-          <h1 className="text-xl font-bold text-text-primary glow-text leading-tight">
+          <h1 className="text-xl font-bold text-text-primary leading-tight">
             {getPageTitle()}
           </h1>
           <p className="text-[11px] font-mono text-text-secondary uppercase tracking-widest hidden sm:block">

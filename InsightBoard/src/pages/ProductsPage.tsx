@@ -48,7 +48,7 @@ export function ProductsPage() {
     >
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-bold text-text-primary glow-text leading-tight">Product Inventory</h2>
+          <h2 className="text-3xl font-bold text-text-primary leading-tight">Product Inventory</h2>
           <p className="text-text-secondary mt-1 font-mono text-xs uppercase tracking-widest">Global catalog management</p>
         </div>
         
@@ -121,7 +121,7 @@ export function ProductsPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                     <div className="absolute top-4 left-4">
-                      <Badge variant="default" className="backdrop-blur-md bg-black/40">
+                      <Badge variant="default" className="backdrop-blur-md bg-white/80 dark:bg-black/40">
                         {product.category}
                       </Badge>
                     </div>
@@ -162,7 +162,7 @@ export function ProductsPage() {
                   
                   {/* Hover Effects */}
                   <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center text-white shadow-glow-purple">
+                    <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center text-white">
                       <ShoppingBag size={16} />
                     </div>
                   </div>

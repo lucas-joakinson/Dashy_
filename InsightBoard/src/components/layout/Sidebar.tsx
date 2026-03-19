@@ -30,7 +30,7 @@ export function Sidebar() {
 
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-screen w-72 bg-surface/80 backdrop-blur-xl border-r border-border-primary transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          "fixed top-0 left-0 z-50 h-screen w-72 bg-surface/80 backdrop-blur-xl border-r border-border-primary transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 overflow-y-auto",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -39,7 +39,7 @@ export function Sidebar() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-primary-400 flex items-center justify-center shadow-glow-purple">
               <LayoutDashboard className="text-text-primary w-6 h-6" />
             </div>
-            <span className="text-xl font-bold font-mono tracking-tight glow-text text-text-primary">
+            <span className="text-xl font-bold font-mono tracking-tight text-text-primary">
               INSIGHT<span className="text-primary-400">BOARD</span>
             </span>
           </div>

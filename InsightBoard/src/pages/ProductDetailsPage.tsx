@@ -37,7 +37,7 @@ export function ProductDetailsPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-rose-500">
         <Box size={64} className="mb-6 opacity-20" />
-        <h2 className="text-2xl font-bold glow-text">Analysis Failed</h2>
+        <h2 className="text-2xl font-bold">Analysis Failed</h2>
         <p className="text-text-secondary mt-2">{error || 'Data packet lost during transmission.'}</p>
         <button 
           onClick={() => navigate('/products')}
@@ -83,7 +83,7 @@ export function ProductDetailsPage() {
                   className="w-full h-full object-contain"
                 />
                 <div className="absolute top-6 left-6">
-                  <Badge variant="success" className="shadow-glow-purple bg-emerald-500/20">
+                  <Badge variant="success" className="bg-emerald-500/10 dark:bg-emerald-500/20">
                     Live Status
                   </Badge>
                 </div>
@@ -100,7 +100,7 @@ export function ProductDetailsPage() {
                   key={idx}
                   onClick={() => setActiveImage(img)}
                   className={`relative h-24 rounded-2xl overflow-hidden border-2 transition-all ${
-                    activeImage === img ? 'border-primary-500 shadow-glow-purple' : 'border-border-primary hover:border-border-secondary'
+                    activeImage === img ? 'border-primary-500' : 'border-border-primary hover:border-border-secondary'
                   }`}
                 >
                   <img src={img} alt="" className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" />
@@ -127,7 +127,7 @@ export function ProductDetailsPage() {
                     {selectedProduct.category}
                   </Badge>
                 </div>
-                <h1 className="text-4xl font-bold text-text-primary glow-text tracking-tight leading-tight">
+                <h1 className="text-4xl font-bold text-text-primary tracking-tight leading-tight">
                   {selectedProduct.title}
                 </h1>
                 <p className="text-text-secondary leading-relaxed">
@@ -137,7 +137,7 @@ export function ProductDetailsPage() {
             )}
           </div>
 
-          <div className="p-8 rounded-[2rem] bg-gradient-to-br from-primary-600/20 to-indigo-600/10 border border-primary-500/20 shadow-glow-purple relative overflow-hidden">
+          <div className="p-8 rounded-[2rem] bg-gradient-to-br from-primary-600/20 to-indigo-600/10 border border-primary-500/20 relative overflow-hidden">
              {isLoading ? (
                <Skeleton className="h-12 w-32" />
              ) : (
@@ -172,7 +172,7 @@ export function ProductDetailsPage() {
           </div>
 
           <div className="flex gap-4">
-            <button className="flex-1 py-4 rounded-2xl bg-primary-500 text-white font-bold font-mono uppercase tracking-wider hover:bg-primary-400 transition-all shadow-glow-purple flex items-center justify-center gap-2">
+            <button className="flex-1 py-4 rounded-2xl bg-primary-500 text-white font-bold font-mono uppercase tracking-wider hover:bg-primary-400 transition-all flex items-center justify-center gap-2">
               <ShoppingCart size={20} /> Deploy Asset
             </button>
             <button className="p-4 rounded-2xl bg-hover-bg border border-border-primary text-text-secondary hover:text-text-primary hover:bg-hover-bg/2 transition-all">
