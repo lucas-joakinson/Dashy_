@@ -56,42 +56,49 @@ export function ProductsPage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="space-y-10"
+      className="space-y-8"
     >
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <h2 className="text-3xl font-bold text-text-primary leading-tight">Product Inventory</h2>
-          <p className="text-text-secondary mt-1 font-mono text-xs uppercase tracking-widest">Global catalog management</p>
-        </div>
-        
-        <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <div className="relative group">
+      <header className="space-y-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <h2 className="text-3xl font-bold text-text-primary leading-tight">Product Inventory</h2>
+            <p className="text-text-secondary mt-1 font-mono text-xs uppercase tracking-widest">Global catalog management</p>
+          </div>
+          
+          <div className="relative group w-full md:w-80">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary group-focus-within:text-primary-400 transition-colors" size={18} />
             <input
               type="text"
-              placeholder="System search..."
-              className="w-full sm:w-64 pl-12 pr-4 py-3 rounded-2xl bg-hover-bg border border-border-primary text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all font-mono text-sm"
+              placeholder="Search assets..."
+              className="w-full pl-12 pr-4 py-3 rounded-2xl bg-hover-bg border border-border-primary text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all font-mono text-sm"
               value={searchQuery}
               onChange={(e) => dispatch(setSearchQuery(e.target.value))}
             />
           </div>
-          
-          <div className="relative w-full sm:w-auto">
-            <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={16} />
-            <select
-              value={selectedCategory}
-              onChange={(e) => dispatch(setSelectedCategory(e.target.value))}
-              className="w-full sm:w-48 pl-12 pr-10 py-3 rounded-2xl bg-hover-bg border border-border-primary text-text-secondary appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500/50 cursor-pointer font-mono text-sm hover:bg-hover-bg/2 transition-all"
-            >
-              {categories.map((category) => (
-                <option key={category} value={category} className="bg-surface text-text-primary">
-                  {category === 'All' 
-                    ? 'All Sectors' 
-                    : category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                </option>
-              ))}
-            </select>
+        </div>
+
+        {/* Category Navigation Chips */}
+        <div className="relative -mx-4 px-4 overflow-hidden">
+          <div className="flex items-center gap-2 overflow-x-auto pb-4 no-scrollbar scroll-smooth">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => dispatch(setSelectedCategory(category))}
+                className={`
+                  px-6 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider whitespace-nowrap transition-all border
+                  ${selectedCategory === category 
+                    ? 'bg-primary-500 text-white border-primary-400 shadow-glow-purple scale-105' 
+                    : 'bg-hover-bg text-text-secondary border-border-primary hover:border-primary-500/30 hover:text-text-primary'}
+                `}
+              >
+                {category === 'All' 
+                  ? 'All Sectors' 
+                  : category.replace(/-/g, ' ')}
+              </button>
+            ))}
           </div>
+          <div className="absolute left-0 top-0 bottom-4 w-12 bg-gradient-to-r from-background to-transparent pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-background to-transparent pointer-events-none" />
         </div>
       </header>
 
