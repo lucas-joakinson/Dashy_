@@ -34,7 +34,8 @@ export function ProductsPage() {
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
+      const matchesCategory = selectedCategory === 'All' || 
+        product.category.toLowerCase() === selectedCategory.toLowerCase();
       return matchesSearch && matchesCategory;
     });
   }, [products, searchQuery, selectedCategory]);
@@ -73,7 +74,9 @@ export function ProductsPage() {
             >
               {categories.map((category) => (
                 <option key={category} value={category} className="bg-surface text-text-primary">
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                  {category === 'All' 
+                    ? 'All Sectors' 
+                    : category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                 </option>
               ))}
             </select>

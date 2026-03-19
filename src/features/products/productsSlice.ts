@@ -105,7 +105,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         const categories = Array.isArray(action.payload) 
-          ? action.payload.map(cat => typeof cat === 'string' ? cat : cat.name || cat.slug)
+          ? action.payload.map(cat => typeof cat === 'string' ? cat : cat.slug || cat.name)
           : [];
         state.categories = ['All', ...categories];
       });
