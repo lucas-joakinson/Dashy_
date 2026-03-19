@@ -9,7 +9,7 @@ import {
 import { Card } from '../components/Card';
 import { Skeleton } from '../components/Skeleton';
 import { Badge } from '../components/Badge';
-import { Search, Filter, Star, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Search, Star, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
