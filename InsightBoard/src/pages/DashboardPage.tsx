@@ -63,7 +63,7 @@ export function DashboardPage() {
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-rose-500">
         <AlertCircle size={64} className="mb-6 opacity-20" />
         <h2 className="text-2xl font-bold glow-text">Initialization Error</h2>
-        <p className="text-gray-400 mt-2">Could not synchronize with the analytics server.</p>
+        <p className="text-text-secondary mt-2">Could not synchronize with the analytics server.</p>
         <button 
           onClick={() => window.location.reload()}
           className="mt-8 px-6 py-2 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-400 hover:bg-primary-500/20 transition-all"
@@ -82,8 +82,8 @@ export function DashboardPage() {
       className="space-y-10"
     >
       <header>
-        <h2 className="text-3xl font-bold text-white glow-text">Ecosystem Health</h2>
-        <p className="text-gray-400 mt-1 font-mono text-xs uppercase tracking-widest">Real-time performance metrics</p>
+        <h2 className="text-3xl font-bold text-text-primary glow-text">Ecosystem Health</h2>
+        <p className="text-text-secondary mt-1 font-mono text-xs uppercase tracking-widest">Real-time performance metrics</p>
       </header>
 
       {/* Stats Grid */}
@@ -127,10 +127,10 @@ export function DashboardPage() {
         <Card className="p-8 h-[450px] flex flex-col group">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-lg font-bold text-white glow-text">Sector Distribution</h3>
+              <h3 className="text-lg font-bold text-text-primary glow-text">Sector Distribution</h3>
               <p className="text-xs font-mono text-primary-400/60 uppercase tracking-widest">Top Product Categories</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-primary-400">
+            <div className="w-10 h-10 rounded-xl bg-hover-bg border border-border-primary flex items-center justify-center text-primary-400">
               <Package size={20} />
             </div>
           </div>
@@ -144,19 +144,20 @@ export function DashboardPage() {
                   <YAxis 
                     dataKey="name" 
                     type="category" 
-                    tick={{fill: '#94a3b8', fontSize: 11, fontFamily: 'JetBrains Mono'}} 
+                    tick={{fill: 'currentColor', fontSize: 11, fontFamily: 'JetBrains Mono'}} 
                     width={100}
+                    className="text-text-secondary"
                   />
                   <Tooltip 
-                     cursor={{fill: 'rgba(255,255,255,0.03)'}}
+                     cursor={{fill: 'rgba(139, 92, 246, 0.05)'}}
                      contentStyle={{ 
-                        backgroundColor: '#16161e', 
+                        backgroundColor: 'var(--surface)', 
                         borderColor: 'rgba(139, 92, 246, 0.2)', 
                         borderRadius: '16px',
-                        color: '#f3f4f6',
+                        color: 'var(--text-primary)',
                         fontSize: '12px',
                         fontFamily: 'JetBrains Mono',
-                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                      }}
                   />
                   <Bar 
@@ -174,10 +175,10 @@ export function DashboardPage() {
         <Card className="p-8 h-[450px] flex flex-col group">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-lg font-bold text-white glow-text">Price Dynamics</h3>
+              <h3 className="text-lg font-bold text-text-primary glow-text">Price Dynamics</h3>
               <p className="text-xs font-mono text-indigo-400/60 uppercase tracking-widest">Inventory Valuation Spreads</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400">
+            <div className="w-10 h-10 rounded-xl bg-hover-bg border border-border-primary flex items-center justify-center text-indigo-400">
               <DollarSign size={20} />
             </div>
           </div>
@@ -195,24 +196,26 @@ export function DashboardPage() {
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(99, 102, 241, 0.1)" vertical={false} />
                   <XAxis 
                     dataKey="range" 
-                    tick={{fill: '#94a3b8', fontSize: 10, fontFamily: 'JetBrains Mono'}} 
+                    tick={{fill: 'currentColor', fontSize: 10, fontFamily: 'JetBrains Mono'}} 
                     axisLine={false}
                     tickLine={false}
+                    className="text-text-secondary"
                   />
                   <YAxis 
-                    tick={{fill: '#94a3b8', fontSize: 10, fontFamily: 'JetBrains Mono'}} 
+                    tick={{fill: 'currentColor', fontSize: 10, fontFamily: 'JetBrains Mono'}} 
                     axisLine={false}
                     tickLine={false}
+                    className="text-text-secondary"
                   />
                   <Tooltip 
                      contentStyle={{ 
-                        backgroundColor: '#16161e', 
+                        backgroundColor: 'var(--surface)', 
                         borderColor: 'rgba(99, 102, 241, 0.2)', 
                         borderRadius: '16px',
-                        color: '#f3f4f6',
+                        color: 'var(--text-primary)',
                         fontSize: '12px',
                         fontFamily: 'JetBrains Mono',
-                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                      }}
                   />
                   <Area 
@@ -249,17 +252,17 @@ function StatCard({ title, value, icon, loading, trend, color }: {
   };
 
   return (
-    <Card className="p-6 relative group border-white/5 hover:border-white/10" hover={true}>
+    <Card className="p-6 relative group border-border-primary hover:border-border-secondary" hover={true}>
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[10px] font-mono font-semibold text-gray-400 uppercase tracking-widest mb-1">{title}</p>
+          <p className="text-[10px] font-mono font-semibold text-text-secondary uppercase tracking-widest mb-1">{title}</p>
           {loading ? (
             <Skeleton className="h-9 w-24 mt-2" />
           ) : (
             <div className="flex flex-col">
-              <span className="text-3xl font-bold text-white tracking-tight">{value}</span>
+              <span className="text-3xl font-bold text-text-primary tracking-tight">{value}</span>
               <span className="text-[10px] font-mono text-emerald-400 mt-1 flex items-center gap-1">
-                {trend} <span className="text-gray-500 opacity-50">vs last cycle</span>
+                {trend} <span className="text-text-secondary opacity-50">vs last cycle</span>
               </span>
             </div>
           )}

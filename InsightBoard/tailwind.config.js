@@ -8,8 +8,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#0f0f14',
-        surface: '#16161e',
+        background: 'var(--background)',
+        surface: 'var(--surface)',
+        'text-primary': 'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        'border-primary': 'var(--border-primary)',
+        'border-secondary': 'var(--border-secondary)',
+        'hover-bg': 'var(--hover-bg)',
         primary: {
           50: '#f5f3ff',
           100: '#ede9fe',

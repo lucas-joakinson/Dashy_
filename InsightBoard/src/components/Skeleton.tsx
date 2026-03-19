@@ -12,7 +12,7 @@ export function Skeleton({ className, count = 1 }: SkeletonProps) {
         <div
           key={i}
           className={cn(
-            "animate-pulse bg-white/5 border border-white/5 rounded-2xl",
+            "animate-pulse bg-hover-bg border border-border-primary rounded-2xl",
             className
           )}
         />

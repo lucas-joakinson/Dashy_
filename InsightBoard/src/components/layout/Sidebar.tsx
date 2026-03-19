@@ -30,22 +30,22 @@ export function Sidebar() {
 
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-screen w-72 bg-surface/80 backdrop-blur-xl border-r border-primary-500/10 transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          "fixed top-0 left-0 z-50 h-screen w-72 bg-surface/80 backdrop-blur-xl border-r border-border-primary transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="flex items-center justify-between h-20 px-8 border-b border-primary-500/10">
+        <div className="flex items-center justify-between h-20 px-8 border-b border-border-primary">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-primary-400 flex items-center justify-center shadow-glow-purple">
-              <LayoutDashboard className="text-white w-6 h-6" />
+              <LayoutDashboard className="text-text-primary w-6 h-6" />
             </div>
-            <span className="text-xl font-bold font-mono tracking-tight glow-text text-white">
+            <span className="text-xl font-bold font-mono tracking-tight glow-text text-text-primary">
               INSIGHT<span className="text-primary-400">BOARD</span>
             </span>
           </div>
           <button 
             onClick={() => dispatch(toggleSidebar())}
-            className="lg:hidden p-2 rounded-lg hover:bg-primary-500/10 text-gray-400 transition-colors"
+            className="lg:hidden p-2 rounded-lg hover:bg-primary-500/10 text-text-secondary transition-colors"
           >
             <X size={20} />
           </button>
@@ -61,8 +61,8 @@ export function Sidebar() {
                 cn(
                   "flex items-center px-4 py-3.5 text-sm font-medium rounded-xl transition-all duration-200 group relative overflow-hidden",
                   isActive
-                    ? "text-white bg-primary-500/10 border border-primary-500/20 shadow-glow-purple"
-                    : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
+                    ? "text-primary-500 bg-primary-500/10 border border-primary-500/20 shadow-glow-purple"
+                    : "text-text-secondary hover:text-text-primary hover:bg-hover-bg"
                 )
               }
             >
@@ -77,14 +77,14 @@ export function Sidebar() {
           ))}
         </nav>
         
-        <div className="absolute bottom-0 w-full p-6 border-t border-primary-500/10">
-          <div className="flex items-center gap-4 px-4 py-3 rounded-2xl bg-white/5 border border-white/5">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500/20 to-primary-700/20 border border-primary-500/30 flex items-center justify-center text-primary-400 font-bold text-sm shadow-inner">
+        <div className="absolute bottom-0 w-full p-6 border-t border-border-primary">
+          <div className="flex items-center gap-4 px-4 py-3 rounded-2xl bg-hover-bg border border-border-primary">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500/20 to-primary-700/20 border border-border-primary flex items-center justify-center text-primary-400 font-bold text-sm shadow-inner">
               LP
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-semibold text-gray-100">Lucas Pires</span>
-              <span className="text-[10px] font-mono text-primary-400/70 uppercase tracking-widest">Administrator</span>
+              <span className="text-sm font-semibold text-text-primary">Lucas Pires</span>
+              <span className="text-[10px] font-mono text-text-secondary uppercase tracking-widest">Administrator</span>
             </div>
           </div>
         </div>
