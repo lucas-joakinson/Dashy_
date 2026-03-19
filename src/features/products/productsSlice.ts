@@ -43,8 +43,11 @@ const initialState: ProductsState = {
   itemsPerPage: 8,
 };
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
-  const response = await api.get('/products?limit=0');
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async (category?: string) => {
+  const url = category && category !== 'All' 
+    ? `/products/category/${category}?limit=0` 
+    : '/products?limit=0';
+  const response = await api.get(url);
   return response.data;
 });
 
@@ -105,7 +108,10 @@ const productsSlice = createSlice({
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         const categories = Array.isArray(action.payload) 
-          ? action.payload.map(cat => typeof cat === 'string' ? cat : cat.slug || cat.name)
+          ? action.payload.map(cat => {
+              if (typeof cat === 'string') return cat;
+              return cat.slug || cat.name || String(cat);
+            })
           : [];
         state.categories = ['All', ...categories];
       });

@@ -31,11 +31,22 @@ export function ProductsPage() {
     }
   }, [dispatch, status]);
 
+  useEffect(() => {
+    if (status !== 'idle') {
+      dispatch(fetchProducts(selectedCategory));
+    }
+  }, [dispatch, selectedCategory]);
+
   const filteredProducts = useMemo(() => {
+    if (!products) return [];
+    
     return products.filter((product) => {
-      const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || 
-        product.category.toLowerCase() === selectedCategory.toLowerCase();
+      const title = product.title || '';
+      const matchesSearch = title.toLowerCase().trim().includes(searchQuery.toLowerCase().trim());
+      
+      const matchesCategory = !selectedCategory || selectedCategory === 'All' || 
+        (product.category && product.category.toLowerCase().replace(/ /g, '-') === selectedCategory.toLowerCase().replace(/ /g, '-'));
+      
       return matchesSearch && matchesCategory;
     });
   }, [products, searchQuery, selectedCategory]);
