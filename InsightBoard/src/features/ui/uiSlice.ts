@@ -11,7 +11,7 @@ const getInitialTheme = () => {
     if (savedTheme) {
       return savedTheme === 'dark';
     }
-    return true; // Default to dark mode
+    return true;
   }
   return true;
 };

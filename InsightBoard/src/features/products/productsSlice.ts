@@ -104,7 +104,6 @@ const productsSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch product details';
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
-        // Handle different return types for categories from dummyjson
         const categories = Array.isArray(action.payload) 
           ? action.payload.map(cat => typeof cat === 'string' ? cat : cat.name || cat.slug)
           : [];

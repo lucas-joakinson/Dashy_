@@ -25,7 +25,6 @@ function App() {
   const { isDarkMode } = useAppSelector((state) => state.ui);
 
   useEffect(() => {
-    // Dark mode is default, but we still handle the class for consistency
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {

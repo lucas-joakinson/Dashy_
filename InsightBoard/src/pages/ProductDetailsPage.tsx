@@ -67,7 +67,6 @@ export function ProductDetailsPage() {
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Visual Assets Sector */}
         <div className="lg:col-span-7 space-y-6">
           <Card className="p-4 bg-hover-bg border-border-primary overflow-hidden group" hover={false}>
             {isLoading ? (
@@ -110,7 +109,6 @@ export function ProductDetailsPage() {
           </div>
         </div>
 
-        {/* Technical Specs Sector */}
         <div className="lg:col-span-5 space-y-8">
           <div className="space-y-4">
             {isLoading ? (
@@ -160,7 +158,7 @@ export function ProductDetailsPage() {
                  </div>
                </div>
              )}
-             {/* Decorative pattern */}
+             
              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl" />
           </div>
 
@@ -182,7 +180,6 @@ export function ProductDetailsPage() {
         </div>
       </div>
 
-      {/* Extended Details */}
       {!isLoading && (
         <Card className="p-10 border-border-primary mt-10" hover={false}>
           <h3 className="text-xl font-bold text-text-primary mb-8 flex items-center gap-3">

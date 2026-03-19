@@ -24,7 +24,7 @@ const initialState: UsersState = {
 };
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await api.get('/users?limit=0'); // Fetch all for total count accuracy
+  const response = await api.get('/users?limit=0');
   return response.data;
 });
 

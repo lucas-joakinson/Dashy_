@@ -71,7 +71,6 @@ export function Sidebar() {
                 "group-hover:text-primary-400"
               )} />
               {item.name}
-              {/* Active Indicator */}
               <div className="absolute left-0 w-1 h-6 bg-primary-500 rounded-r-full scale-y-0 group-[.active]:scale-y-100 transition-transform" />
             </NavLink>
           ))}
