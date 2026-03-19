@@ -13,7 +13,7 @@ export function Header() {
     if (path === '/') return 'Dashboard Overview';
     if (path === '/products') return 'Product Inventory';
     if (path.startsWith('/products/')) return 'Product Details';
-    return 'InsightBoard';
+    return 'Dashy_';
   };
 
   return (

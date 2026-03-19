@@ -37,10 +37,10 @@ export function Sidebar() {
         <div className="flex items-center justify-between h-20 px-8 border-b border-border-primary">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-primary-400 flex items-center justify-center shadow-glow-purple">
-              <LayoutDashboard className="text-text-primary w-6 h-6" />
+              <h1 className='font-bold flex items-center justify-center text-primary text-xl'>D_</h1>
             </div>
-            <span className="text-xl font-bold font-mono tracking-tight text-text-primary">
-              INSIGHT<span className="text-primary-400">BOARD</span>
+            <span className="text-xl font-bold font-mono tracking-tight text-primary">
+              DASHY<span className="text-primary-400">_</span>
             </span>
           </div>
           <button 
