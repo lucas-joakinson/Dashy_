@@ -17,7 +17,6 @@ export interface Product {
 
 interface ProductsState {
   products: Product[];
-  categories: string[];
   selectedProduct: Product | null;
   total: number;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -25,39 +24,32 @@ interface ProductsState {
   error: string | null;
   searchQuery: string;
   selectedCategory: string;
+  sortBy: 'none' | 'price-low' | 'price-high' | 'rating';
   currentPage: number;
   itemsPerPage: number;
 }
 
 const initialState: ProductsState = {
   products: [],
-  categories: [],
   selectedProduct: null,
   total: 0,
   status: 'idle',
   detailsStatus: 'idle',
   error: null,
   searchQuery: '',
-  selectedCategory: 'All',
+  selectedCategory: 'all',
+  sortBy: 'none',
   currentPage: 1,
   itemsPerPage: 8,
 };
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async (category?: string) => {
-  const url = category && category !== 'All' 
-    ? `/products/category/${category}?limit=0` 
-    : '/products?limit=0';
-  const response = await api.get(url);
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
+  const response = await api.get('/products?limit=0');
   return response.data;
 });
 
 export const fetchProductById = createAsyncThunk('products/fetchProductById', async (id: string | number) => {
   const response = await api.get(`/products/${id}`);
-  return response.data;
-});
-
-export const fetchCategories = createAsyncThunk('products/fetchCategories', async () => {
-  const response = await api.get('/products/categories');
   return response.data;
 });
 
@@ -72,6 +64,9 @@ const productsSlice = createSlice({
     setSelectedCategory: (state, action: PayloadAction<string>) => {
       state.selectedCategory = action.payload;
       state.currentPage = 1;
+    },
+    setSortBy: (state, action: PayloadAction<ProductsState['sortBy']>) => {
+      state.sortBy = action.payload;
     },
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
@@ -105,18 +100,15 @@ const productsSlice = createSlice({
       .addCase(fetchProductById.rejected, (state, action) => {
         state.detailsStatus = 'failed';
         state.error = action.error.message || 'Failed to fetch product details';
-      })
-      .addCase(fetchCategories.fulfilled, (state, action) => {
-        const categories = Array.isArray(action.payload) 
-          ? action.payload.map(cat => {
-              if (typeof cat === 'string') return cat;
-              return cat.slug || cat.name || String(cat);
-            })
-          : [];
-        state.categories = ['All', ...categories];
       });
   },
 });
 
-export const { setSearchQuery, setSelectedCategory, setCurrentPage, clearSelectedProduct } = productsSlice.actions;
+export const { 
+  setSearchQuery, 
+  setSelectedCategory, 
+  setSortBy, 
+  setCurrentPage, 
+  clearSelectedProduct 
+} = productsSlice.actions;
 export default productsSlice.reducer;

@@ -2,14 +2,14 @@ import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/storeHook';
 import { 
   fetchProducts, 
-  fetchCategories, 
   setSearchQuery, 
-  setSelectedCategory 
+  setSelectedCategory,
+  setSortBy
 } from '../features/products/productsSlice';
 import { Card } from '../components/Card';
 import { Skeleton } from '../components/Skeleton';
 import { Badge } from '../components/Badge';
-import { Search, Star, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Search, Star, ShoppingBag, ArrowRight, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -18,38 +18,42 @@ export function ProductsPage() {
   const navigate = useNavigate();
   const { 
     products, 
-    categories, 
     status, 
     searchQuery, 
-    selectedCategory 
+    selectedCategory,
+    sortBy
   } = useAppSelector((state) => state.products);
 
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchProducts());
-      dispatch(fetchCategories());
     }
   }, [dispatch, status]);
 
-  useEffect(() => {
-    if (status !== 'idle') {
-      dispatch(fetchProducts(selectedCategory));
-    }
-  }, [dispatch, selectedCategory]);
+  const categories = useMemo(() => {
+    const cats = products.map(p => p.category);
+    return ['all', ...Array.from(new Set(cats))];
+  }, [products]);
 
   const filteredProducts = useMemo(() => {
     if (!products) return [];
     
-    return products.filter((product) => {
-      const title = product.title || '';
-      const matchesSearch = title.toLowerCase().trim().includes(searchQuery.toLowerCase().trim());
-      
-      const matchesCategory = !selectedCategory || selectedCategory === 'All' || 
-        (product.category && product.category.toLowerCase().replace(/ /g, '-') === selectedCategory.toLowerCase().replace(/ /g, '-'));
-      
+    let result = products.filter((product) => {
+      const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
+      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [products, searchQuery, selectedCategory]);
+
+    if (sortBy === 'price-low') {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-high') {
+      result.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'rating') {
+      result.sort((a, b) => b.rating - a.rating);
+    }
+
+    return result;
+  }, [products, searchQuery, selectedCategory, sortBy]);
 
   return (
     <motion.div 
@@ -65,40 +69,56 @@ export function ProductsPage() {
             <p className="text-text-secondary mt-1 font-mono text-xs uppercase tracking-widest">Global catalog management</p>
           </div>
           
-          <div className="relative group w-full md:w-80">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary group-focus-within:text-primary-400 transition-colors" size={18} />
-            <input
-              type="text"
-              placeholder="Search assets..."
-              className="w-full pl-12 pr-4 py-3 rounded-2xl bg-hover-bg border border-border-primary text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all font-mono text-sm"
-              value={searchQuery}
-              onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-            />
+          <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+            <div className="relative group flex-1 md:w-80">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary group-focus-within:text-primary-400 transition-colors" size={18} />
+              <input
+                type="text"
+                placeholder="Search assets..."
+                className="w-full pl-12 pr-4 py-3 rounded-2xl bg-hover-bg border border-border-primary text-text-primary placeholder:text-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all font-mono text-sm"
+                value={searchQuery}
+                onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Category Navigation Chips */}
-        <div className="relative -mx-4 px-4 overflow-hidden">
-          <div className="flex items-center gap-2 overflow-x-auto pb-4 no-scrollbar scroll-smooth">
-            {categories.map((category) => (
+        {/* Filters Bar */}
+        <div className="flex flex-wrap items-center gap-4 py-4 border-y border-border-primary/50">
+          <div className="flex items-center gap-2 text-text-secondary mr-2">
+            <SlidersHorizontal size={16} />
+            <span className="text-xs font-mono uppercase tracking-wider">Filters:</span>
+          </div>
+
+          <div className="flex flex-wrap gap-2 flex-1">
+            {categories.slice(0, 8).map((category) => (
               <button
                 key={category}
                 onClick={() => dispatch(setSelectedCategory(category))}
-                className={`
-                  px-6 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider whitespace-nowrap transition-all border
-                  ${selectedCategory === category 
-                    ? 'bg-primary-500 text-white border-primary-400 shadow-glow-purple scale-105' 
-                    : 'bg-hover-bg text-text-secondary border-border-primary hover:border-primary-500/30 hover:text-text-primary'}
-                `}
+                className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all border ${
+                  selectedCategory === category
+                    ? 'bg-primary-500/10 border-primary-500/50 text-primary-400 shadow-glow-purple/20'
+                    : 'bg-hover-bg border-border-primary text-text-secondary hover:border-primary-500/30'
+                }`}
               >
-                {category === 'All' 
-                  ? 'All Sectors' 
-                  : category.replace(/-/g, ' ')}
+                {category.charAt(0).toUpperCase() + category.slice(1)}
               </button>
             ))}
           </div>
-          <div className="absolute left-0 top-0 bottom-4 w-12 bg-gradient-to-r from-background to-transparent pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-4 w-12 bg-gradient-to-l from-background to-transparent pointer-events-none" />
+
+          <div className="relative group">
+            <select
+              value={sortBy}
+              onChange={(e) => dispatch(setSortBy(e.target.value as any))}
+              className="appearance-none pl-4 pr-10 py-2 rounded-xl bg-hover-bg border border-border-primary text-xs font-mono text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/50 cursor-pointer"
+            >
+              <option value="none">Sort by: Default</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Top Rated</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={14} />
+          </div>
         </div>
       </header>
 
@@ -193,15 +213,16 @@ export function ProductsPage() {
           ) : (
             <div className="col-span-full py-20 flex flex-col items-center justify-center text-text-secondary bg-hover-bg rounded-[2rem] border border-dashed border-border-primary">
               <ShoppingBag size={48} className="mb-4 opacity-20" />
-              <p className="text-lg font-medium">No results found in current sector.</p>
+              <p className="text-lg font-medium">No results found.</p>
               <button 
                 onClick={() => {
                   dispatch(setSearchQuery(''));
-                  dispatch(setSelectedCategory('All'));
+                  dispatch(setSelectedCategory('all'));
+                  dispatch(setSortBy('none'));
                 }}
                 className="mt-4 text-primary-400 hover:underline font-mono text-sm"
               >
-                Reset System Filters
+                Clear All Filters
               </button>
             </div>
           )}
