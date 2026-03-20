@@ -1,10 +1,11 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/storeHook';
 import { 
   fetchProducts, 
   setSearchQuery, 
   setSelectedCategory,
-  setSortBy
+  setSortBy,
+  setPriceRange
 } from '../features/products/productsSlice';
 import { Card } from '../components/Card';
 import { Skeleton } from '../components/Skeleton';
@@ -16,12 +17,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 export function ProductsPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const { 
     products, 
     status, 
     searchQuery, 
     selectedCategory,
-    sortBy
+    sortBy,
+    maxPrice
   } = useAppSelector((state) => state.products);
 
   useEffect(() => {
@@ -29,6 +33,30 @@ export function ProductsPage() {
       dispatch(fetchProducts());
     }
   }, [dispatch, status]);
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    const slider = scrollRef.current;
+    slider.style.scrollBehavior = 'auto'; 
+    const startX = e.pageX - slider.offsetLeft;
+    const scrollLeft = slider.scrollLeft;
+
+    const onMouseMove = (moveE: MouseEvent) => {
+      moveE.preventDefault();
+      const x = moveE.pageX - slider.offsetLeft;
+      const walk = (x - startX); 
+      slider.scrollLeft = scrollLeft - walk;
+    };
+
+    const onMouseUp = () => {
+      slider.style.scrollBehavior = 'smooth';
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
 
   const categories = useMemo(() => {
     const cats = products.map(p => p.category);
@@ -84,29 +112,35 @@ export function ProductsPage() {
         </div>
 
         {/* Filters Bar */}
-        <div className="flex flex-wrap items-center gap-4 py-4 border-y border-border-primary/50">
-          <div className="flex items-center gap-2 text-text-secondary mr-2">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6 py-4 border-y border-border-primary/50 overflow-hidden">
+          <div className="flex items-center gap-2 text-text-secondary shrink-0">
             <SlidersHorizontal size={16} />
             <span className="text-xs font-mono uppercase tracking-wider">Filters:</span>
           </div>
 
-          <div className="flex flex-wrap gap-2 flex-1">
-            {categories.slice(0, 8).map((category) => (
-              <button
-                key={category}
-                onClick={() => dispatch(setSelectedCategory(category))}
-                className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all border ${
-                  selectedCategory === category
-                    ? 'bg-primary-500/10 border-primary-500/50 text-primary-400 shadow-glow-purple/20'
-                    : 'bg-hover-bg border-border-primary text-text-secondary hover:border-primary-500/30'
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
-            ))}
+          <div className="flex-1 relative overflow-hidden">
+            <div 
+              ref={scrollRef}
+              onMouseDown={onMouseDown}
+              className="flex gap-2 overflow-x-auto no-scrollbar pb-1 cursor-grab active:cursor-grabbing select-none scroll-smooth"
+            >
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => dispatch(setSelectedCategory(category))}
+                  className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all border whitespace-nowrap shrink-0 pointer-events-auto ${
+                    selectedCategory === category
+                      ? 'bg-primary-500/10 border-primary-500/50 text-primary-400 shadow-glow-purple/20'
+                      : 'bg-hover-bg border-border-primary text-text-secondary hover:border-primary-500/30'
+                  }`}
+                >
+                  {category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ')}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="relative group">
+          <div className="relative group shrink-0 self-end lg:self-center">
             <select
               value={sortBy}
               onChange={(e) => dispatch(setSortBy(e.target.value as any))}
@@ -219,6 +253,7 @@ export function ProductsPage() {
                   dispatch(setSearchQuery(''));
                   dispatch(setSelectedCategory('all'));
                   dispatch(setSortBy('none'));
+                  dispatch(setPriceRange(maxPrice));
                 }}
                 className="mt-4 text-primary-400 hover:underline font-mono text-sm"
               >

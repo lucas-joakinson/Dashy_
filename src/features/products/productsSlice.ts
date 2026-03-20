@@ -25,6 +25,8 @@ interface ProductsState {
   searchQuery: string;
   selectedCategory: string;
   sortBy: 'none' | 'price-low' | 'price-high' | 'rating';
+  priceRange: number;
+  maxPrice: number;
   currentPage: number;
   itemsPerPage: number;
 }
@@ -39,6 +41,8 @@ const initialState: ProductsState = {
   searchQuery: '',
   selectedCategory: 'all',
   sortBy: 'none',
+  priceRange: 10000,
+  maxPrice: 10000,
   currentPage: 1,
   itemsPerPage: 8,
 };
@@ -68,6 +72,10 @@ const productsSlice = createSlice({
     setSortBy: (state, action: PayloadAction<ProductsState['sortBy']>) => {
       state.sortBy = action.payload;
     },
+    setPriceRange: (state, action: PayloadAction<number>) => {
+      state.priceRange = action.payload;
+      state.currentPage = 1;
+    },
     setCurrentPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
@@ -85,6 +93,11 @@ const productsSlice = createSlice({
         state.status = 'succeeded';
         state.products = action.payload.products;
         state.total = action.payload.total;
+        
+        const prices = action.payload.products.map((p: Product) => p.price);
+        const max = Math.max(...prices, 0);
+        state.maxPrice = max;
+        state.priceRange = max;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = 'failed';
@@ -108,6 +121,7 @@ export const {
   setSearchQuery, 
   setSelectedCategory, 
   setSortBy, 
+  setPriceRange,
   setCurrentPage, 
   clearSelectedProduct 
 } = productsSlice.actions;
