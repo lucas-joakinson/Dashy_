@@ -112,7 +112,7 @@ export function ProductsPage() {
         </div>
 
         {/* Filters Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center gap-6 py-4 border-y border-border-primary/50 overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-6 py-4 border-y border-border-primary dark:border-white/5 overflow-hidden">
           <div className="flex items-center gap-2 text-text-secondary shrink-0">
             <SlidersHorizontal size={16} />
             <span className="text-xs font-mono uppercase tracking-wider">Filters:</span>
