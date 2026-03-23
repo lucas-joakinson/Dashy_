@@ -1,15 +1,18 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/storeHook';
 import { 
-  fetchProducts, 
+  fetchProducts,
+  fetchCategories,
   setSearchQuery, 
   setSelectedCategory,
   setSortBy,
-  setPriceRange
+  setPriceRange,
+  setCurrentPage
 } from '../features/products/productsSlice';
 import { Card } from '../components/Card';
 import { Skeleton } from '../components/Skeleton';
 import { Badge } from '../components/Badge';
+import { Pagination } from '../components/Pagination';
 import { Search, Star, ShoppingBag, ArrowRight, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,18 +24,30 @@ export function ProductsPage() {
 
   const { 
     products, 
+    categories,
     status, 
     searchQuery, 
     selectedCategory,
     sortBy,
-    maxPrice
+    maxPrice,
+    currentPage,
+    itemsPerPage,
+    total
   } = useAppSelector((state) => state.products);
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchProducts());
-    }
-  }, [dispatch, status]);
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const params = {
+      page: currentPage,
+      limit: itemsPerPage,
+      search: searchQuery,
+      category: selectedCategory
+    };
+    dispatch(fetchProducts(params));
+  }, [dispatch, currentPage, searchQuery, selectedCategory, itemsPerPage]);
 
   const onMouseDown = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
@@ -58,19 +73,10 @@ export function ProductsPage() {
     window.addEventListener('mouseup', onMouseUp);
   };
 
-  const categories = useMemo(() => {
-    const cats = products.map(p => p.category);
-    return ['all', ...Array.from(new Set(cats))];
-  }, [products]);
-
   const filteredProducts = useMemo(() => {
     if (!products) return [];
     
-    let result = products.filter((product) => {
-      const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
-      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
+    let result = [...products];
 
     if (sortBy === 'price-low') {
       result.sort((a, b) => a.price - b.price);
@@ -81,7 +87,12 @@ export function ProductsPage() {
     }
 
     return result;
-  }, [products, searchQuery, selectedCategory, sortBy]);
+  }, [products, sortBy]);
+
+  const handlePageChange = (page: number) => {
+    dispatch(setCurrentPage(page));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <motion.div 
@@ -263,6 +274,13 @@ export function ProductsPage() {
           )}
         </AnimatePresence>
       </div>
+
+      <Pagination 
+        currentPage={currentPage}
+        totalItems={total}
+        itemsPerPage={itemsPerPage}
+        onPageChange={handlePageChange}
+      />
     </motion.div>
   );
 }

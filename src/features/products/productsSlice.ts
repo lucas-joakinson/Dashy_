@@ -17,6 +17,7 @@ export interface Product {
 
 interface ProductsState {
   products: Product[];
+  categories: string[];
   selectedProduct: Product | null;
   total: number;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -33,6 +34,7 @@ interface ProductsState {
 
 const initialState: ProductsState = {
   products: [],
+  categories: ['all'],
   selectedProduct: null,
   total: 0,
   status: 'idle',
@@ -47,9 +49,47 @@ const initialState: ProductsState = {
   itemsPerPage: 8,
 };
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
-  const response = await api.get('/products?limit=0');
-  return response.data;
+interface FetchProductsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+}
+
+export const fetchProducts = createAsyncThunk(
+  'products/fetchProducts', 
+  async (params: FetchProductsParams | undefined) => {
+    const { page = 1, limit = 0, search = '', category = 'all' } = params || {};
+    const skip = (page - 1) * limit;
+    
+    let url = '/products';
+    const queryParams = new URLSearchParams();
+    
+    if (limit > 0) {
+      queryParams.append('limit', limit.toString());
+      queryParams.append('skip', skip.toString());
+    } else {
+      queryParams.append('limit', '0');
+    }
+
+    if (search) {
+      url = '/products/search';
+      queryParams.append('q', search);
+    } else if (category !== 'all') {
+      url = `/products/category/${category}`;
+    }
+
+    const response = await api.get(`${url}?${queryParams.toString()}`);
+    return response.data;
+  }
+);
+
+export const fetchCategories = createAsyncThunk('products/fetchCategories', async () => {
+  const response = await api.get('/products/categories');
+  const data = response.data;
+  return Array.isArray(data) && typeof data[0] === 'object' 
+    ? data.map((c: any) => c.slug) 
+    : data;
 });
 
 export const fetchProductById = createAsyncThunk('products/fetchProductById', async (id: string | number) => {
@@ -94,14 +134,19 @@ const productsSlice = createSlice({
         state.products = action.payload.products;
         state.total = action.payload.total;
         
-        const prices = action.payload.products.map((p: Product) => p.price);
-        const max = Math.max(...prices, 0);
-        state.maxPrice = max;
-        state.priceRange = max;
+        if (state.maxPrice === 10000 && action.payload.products.length > 0) {
+          const prices = action.payload.products.map((p: Product) => p.price);
+          const max = Math.max(...prices, 0);
+          state.maxPrice = max;
+          state.priceRange = max;
+        }
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || 'Failed to fetch products';
+      })
+      .addCase(fetchCategories.fulfilled, (state, action) => {
+        state.categories = ['all', ...action.payload];
       })
       .addCase(fetchProductById.pending, (state) => {
         state.detailsStatus = 'loading';
