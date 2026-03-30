@@ -81,8 +81,8 @@ src/
 ## Autor
 
 **Lucas Joakinson**
-- Portfólio: [seuportfolio.com](https://joakinson-dev.vercel.app.com)
-- LinkedIn: [linkedin.com/in/seu-perfil](https://linkedin.com/in/lucasjoakinson)
+- Portfólio: https://joakinson-dev.vercel.app.com
+- LinkedIn: https://linkedin.com/in/lucasjoakinson
 
 ---
 
