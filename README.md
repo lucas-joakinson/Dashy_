@@ -81,7 +81,7 @@ src/
 ## Autor
 
 **Lucas Joakinson**
-- Portfólio: https://joakinson-dev.vercel.app.com
+- Portfólio: https://joakinson-dev.vercel.app
 - LinkedIn: https://linkedin.com/in/lucasjoakinson
 
 ---
